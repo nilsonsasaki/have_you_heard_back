@@ -6,6 +6,7 @@ const Room = require('./room.class');
 const Redis = require('./redis.service');
 const Server = require('./server.service');
 const Users = require('./users.service');
+const Games = require('./games.service');
 
 // The class is given when something requires this module
 module.exports = class Rooms {
@@ -397,17 +398,23 @@ module.exports = class Rooms {
             return undefined;
         }
 
-        let userPromises = [];
+        let allPromises = [];
         for (let user of room.users) {
-            userPromises.push(Users.get(user));
+            allPromises.push(Users.get(user));
         }
 
+        // If there is a game in progress, obtain it's state
         if (room.game) {
-            //TODO get game state
+            allPromises.push(Games.get(room.game));
         }
 
-        Promise.all(userPromises).then((completeUsers) => {
-            room.users = completeUsers;
+        Promise.all(allPromises).then((values) => {
+
+            if (room.game) {
+                room.game = values.pop();
+            }
+
+            room.users = values;
 
             if (cb) {
                 cb(room);

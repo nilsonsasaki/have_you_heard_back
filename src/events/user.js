@@ -19,6 +19,7 @@ module.exports = function(socket) {
                 require('./leave')(socket);
                 require('./new_room')(socket);
                 require('./name')(socket);
+                require('./start')(socket);
             } else {
                 console.error('Could not create user');
             }

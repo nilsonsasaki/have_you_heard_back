@@ -24,6 +24,16 @@
             backdrop-filter: blur(10px);
         }
 
+        .form_button {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.25rem;
+            position: static;
+            display: flex;
+            height: 3rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+
         .form_chat {
             background: rgba(0, 0, 0, 0.15);
             padding: 0.25rem;
@@ -104,11 +114,14 @@
 
 <body>
     <div class="menu">
-        <form class="form_s" id="newRoomForm" action="">
+        <form class="form_button" id="newRoomForm" action="">
             <button class="button_s">New Room</button>
         </form>
-        <form class="form_s" id="leaveForm" action="">
+        <form class="form_button" id="leaveForm" action="">
             <button class="button_s">Leave Room</button>
+        </form>
+        <form class="form_button" id="startForm" action="">
+            <button class="button_s">Start game</button>
         </form>
         <form class="form_s" id="joinForm" action="">
             <input class="input" id="joinInput" autocomplete="off" />
@@ -141,6 +154,7 @@
 
         var newRoomForm = document.getElementById('newRoomForm');
         var leaveForm = document.getElementById('leaveForm');
+        var startForm = document.getElementById('startForm');
 
         var messageForm = document.getElementById('messageForm');
         var messageInput = document.getElementById('messageInput');
@@ -190,6 +204,12 @@
             e.preventDefault();
             socket.emit('leave');
             currentRoom.textContent = 'Lobby';
+        });
+
+        startForm.addEventListener('submit', function(e)
+        {
+            e.preventDefault();
+            socket.emit('start');
         });
 
         messageForm.addEventListener('submit', function(e)
